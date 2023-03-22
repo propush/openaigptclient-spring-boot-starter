@@ -6,7 +6,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.spring") version "1.8.10"
-    `maven-publish`
 }
 
 fun composeBranchName(): String? =
@@ -34,11 +33,10 @@ fun getVersionPostfix(): String {
 }
 group = "com.pushkin"
 val postfix = getVersionPostfix()
-version = "1.0.9-$postfix"
+version = "1.0.11-$postfix"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
@@ -72,17 +70,5 @@ tasks {
         useJUnitPlatform()
         testLogging { events("passed", "skipped", "failed", "standardOut", "standardError") }
         systemProperties = System.getProperties().map { it.key.toString() to it.value.toString() }.toMap()
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-            pom {
-                name.set("OpenAI GPT Client Spring Boot Starter")
-                description.set("Spring Boot Starter for OpenAI GPT Client")
-            }
-        }
     }
 }
