@@ -1,0 +1,10 @@
+openai:
+  api-key: ${OPENAI_API_KEY}
+  organization: ${OPENAI_ORGANIZATION??:}
+  retry-count: 3
+logging:
+  level:
+    com.pushkin: debug
+spring:
+  profiles:
+    active: test
