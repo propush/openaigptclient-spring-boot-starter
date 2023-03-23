@@ -32,9 +32,9 @@ fun getVersionPostfix(): String {
         else -> branch.toUpperCase()
     }
 }
-group = "com.pushkin"
+group = "com.github.propush"
 val postfix = getVersionPostfix()
-version = "1.0.13-$postfix"
+version = "1.0.14-$postfix"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
