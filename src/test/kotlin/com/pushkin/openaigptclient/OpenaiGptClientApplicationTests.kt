@@ -1,11 +1,10 @@
 package com.pushkin.openaigptclient
 
+import com.pushkin.openaigptclient.configuration.TestsConfiguration
 import org.junit.jupiter.api.Test
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
-@EnableAutoConfiguration
+@SpringBootTest(classes = [TestsConfiguration::class])
 class OpenaiGptClientApplicationTests {
 
     @Test
@@ -13,4 +12,3 @@ class OpenaiGptClientApplicationTests {
     }
 
 }
-
