@@ -6,6 +6,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.spring") version "1.8.10"
+    `maven-publish`
 }
 
 fun composeBranchName(): String? =
@@ -33,7 +34,7 @@ fun getVersionPostfix(): String {
 }
 group = "com.pushkin"
 val postfix = getVersionPostfix()
-version = "1.0.11-$postfix"
+version = "1.0.13-$postfix"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
