@@ -9,8 +9,7 @@ plugins {
 }
 
 group = "com.github.propush"
-val postfix = "HEAD"
-version = "1.0.15-$postfix"
+version = "1.0.15"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
@@ -47,5 +46,13 @@ tasks {
         useJUnitPlatform()
         testLogging { events("passed", "skipped", "failed", "standardOut", "standardError") }
         systemProperties = System.getProperties().map { it.key.toString() to it.value.toString() }.toMap()
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
     }
 }
