@@ -1,39 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.ByteArrayOutputStream
 
 plugins {
     id("org.springframework.boot") version "3.0.4"
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.8.10"
     kotlin("plugin.spring") version "1.8.10"
+    `maven-publish`
 }
 
-fun composeBranchName(): String? =
-    try {
-        println("Task Getting Branch Name...")
-        val stdout = ByteArrayOutputStream()
-        exec {
-            commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
-            standardOutput = stdout
-        }
-        stdout.toString().trim()
-    } catch (e: Exception) {
-        println("Exception = " + e.message)
-        null
-    }
-
-fun getVersionPostfix(): String {
-    val branch = composeBranchName() ?: throw IllegalArgumentException("Branch name not defined")
-    println("Git Current Branch = $branch")
-    return when (branch) {
-        "master" -> "SNAPSHOT"
-        "release" -> "RELEASE"
-        else -> branch.toUpperCase()
-    }
-}
-group = "com.pushkin"
-val postfix = getVersionPostfix()
-version = "1.0.11-$postfix"
+group = "com.github.propush"
+version = "1.0.17"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
@@ -70,5 +46,13 @@ tasks {
         useJUnitPlatform()
         testLogging { events("passed", "skipped", "failed", "standardOut", "standardError") }
         systemProperties = System.getProperties().map { it.key.toString() to it.value.toString() }.toMap()
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
     }
 }

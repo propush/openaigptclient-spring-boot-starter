@@ -25,14 +25,13 @@ class OpenaiGptClientAutoConfiguration {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
-    @Bean
-    @ConditionalOnMissingBean(RestTemplate::class)
-    fun restTemplate(): RestTemplate = RestTemplate()
+    @Autowired
+    private lateinit var restTemplate: RestTemplate
 
     @Bean
     @ConditionalOnMissingBean(OpenaiClient::class)
     fun openaiClient(): OpenaiClient = OpenaiClientImpl(
-        restTemplate(),
+        restTemplate,
         objectMapper,
         openaiClientProperties
     )

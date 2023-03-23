@@ -1,6 +1,7 @@
 package com.pushkin.openaigptclient.openai.client.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.pushkin.openaigptclient.configuration.TestsConfiguration
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -15,7 +16,7 @@ import org.springframework.web.client.RestTemplate
 import java.io.IOException
 
 
-@SpringBootTest
+@SpringBootTest(classes = [TestsConfiguration::class])
 @EnableAutoConfiguration
 class OpenaiClientImplUnitTest {
 
