@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.ByteArrayOutputStream
 
 plugins {
     id("org.springframework.boot") version "3.0.4"
@@ -9,32 +8,9 @@ plugins {
     `maven-publish`
 }
 
-fun composeBranchName(): String? =
-    try {
-        println("Task Getting Branch Name...")
-        val stdout = ByteArrayOutputStream()
-        exec {
-            commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
-            standardOutput = stdout
-        }
-        stdout.toString().trim()
-    } catch (e: Exception) {
-        println("Exception = " + e.message)
-        null
-    }
-
-fun getVersionPostfix(): String {
-    val branch = composeBranchName() ?: throw IllegalArgumentException("Branch name not defined")
-    println("Git Current Branch = $branch")
-    return when (branch) {
-        "master" -> "SNAPSHOT"
-        "release" -> "RELEASE"
-        else -> branch.toUpperCase()
-    }
-}
 group = "com.github.propush"
-val postfix = getVersionPostfix()
-version = "1.0.14-$postfix"
+val postfix = "HEAD"
+version = "1.0.15-$postfix"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
