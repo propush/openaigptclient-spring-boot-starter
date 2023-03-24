@@ -1,9 +1,9 @@
 package com.pushkin.openaigptclient.openai.service.impl
 
 import com.pushkin.openaigptclient.openai.client.OpenaiClient
+import com.pushkin.openaigptclient.openai.exception.OpenaiClientException
 import com.pushkin.openaigptclient.openai.vo.CompletionChunk
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
@@ -15,8 +15,8 @@ class OpenaiServiceImplTest {
     private lateinit var openaiServiceImpl: OpenaiServiceImpl
     private lateinit var openaiClient: OpenaiClient
 
-    @BeforeEach
-    fun setUp() {
+    @Test
+    fun query() {
         openaiClient = mock {
             on { fetchCompletion(any(), any(), any()) } doAnswer {
                 with((it.getArgument(2) as ((CompletionChunk) -> Unit))) {
@@ -32,10 +32,7 @@ class OpenaiServiceImplTest {
             }
         }
         openaiServiceImpl = OpenaiServiceImpl(openaiClient)
-    }
 
-    @Test
-    fun query() {
         var chunkCounter = 0
         val rs = openaiServiceImpl.query("test", 10) {
             println(it)
@@ -59,5 +56,20 @@ class OpenaiServiceImplTest {
         }
         assertEquals("test1 test2\ntest3\n\n", rs)
         assertEquals(3, chunkCounter)
+    }
+
+    @Test
+    fun queryExceptionInClient() {
+        openaiClient = mock {
+            on { fetchCompletion(any(), any(), any()) } doAnswer {
+                throw OpenaiClientException("test")
+            }
+        }
+        openaiServiceImpl = OpenaiServiceImpl(openaiClient)
+        val rs = openaiServiceImpl.query("test", 10) {
+            println(it)
+            assertEquals(CompletionChunk("test", false), it)
+        }
+        assertEquals("test", rs)
     }
 }

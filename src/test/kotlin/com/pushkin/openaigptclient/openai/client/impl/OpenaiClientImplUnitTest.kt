@@ -2,11 +2,11 @@ package com.pushkin.openaigptclient.openai.client.impl
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.pushkin.openaigptclient.configuration.TestsConfiguration
-import org.junit.jupiter.api.Assertions.assertTrue
+import com.pushkin.openaigptclient.openai.exception.OpenaiClientException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.client.ExpectedCount
 import org.springframework.test.web.client.MockRestServiceServer
@@ -17,7 +17,6 @@ import java.io.IOException
 
 
 @SpringBootTest(classes = [TestsConfiguration::class])
-@EnableAutoConfiguration
 class OpenaiClientImplUnitTest {
 
     private lateinit var openaiClient: OpenaiClientImpl
@@ -45,9 +44,7 @@ class OpenaiClientImplUnitTest {
             ExpectedCount.times(3),
             requestTo("https://api.openai.com/v1/chat/completions")
         ).andRespond(withException(IOException("timeout")))
-        val completion = openaiClient.fetchCompletion("test", 10) {}
-        println("completion: $completion")
-        assertTrue(completion.startsWith("Sorry"))
+        assertThrows<OpenaiClientException> { openaiClient.fetchCompletion("test", 10) {} }
         mockServer.verify()
     }
 }

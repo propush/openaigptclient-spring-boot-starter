@@ -69,7 +69,7 @@ class OpenaiClientImpl(
             }
         } while (retryCount < openaiClientProperties.retryCount && !gotResponse)
         if (!gotResponse) {
-            rs.append("Sorry, I'm not able to answer your question right now. Please try again later.")
+            throw OpenaiClientException("Sorry, I'm not able to answer your question right now. Please try again later.")
         }
         return rs.toString()
     }

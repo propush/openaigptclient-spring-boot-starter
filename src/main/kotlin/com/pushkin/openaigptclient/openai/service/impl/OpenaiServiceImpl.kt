@@ -1,6 +1,7 @@
 package com.pushkin.openaigptclient.openai.service.impl
 
 import com.pushkin.openaigptclient.openai.client.OpenaiClient
+import com.pushkin.openaigptclient.openai.exception.OpenaiClientException
 import com.pushkin.openaigptclient.openai.service.OpenaiService
 import com.pushkin.openaigptclient.openai.vo.CompletionChunk
 import mu.KLogging
@@ -15,7 +16,13 @@ class OpenaiServiceImpl(
         chunkCallback: (completionChunk: CompletionChunk) -> Unit
     ): String {
         val collector = StringBuffer()
-        return openaiClient.fetchCompletion(prompt, maxTokens) { collectChunk(it, collector, chunkCallback) }
+        return try {
+            openaiClient.fetchCompletion(prompt, maxTokens) { collectChunk(it, collector, chunkCallback) }
+        } catch (e: OpenaiClientException) {
+            val reason = e.message ?: e.toString()
+            chunkCallback(CompletionChunk(reason, false))
+            reason
+        }
     }
 
     private fun collectChunk(
