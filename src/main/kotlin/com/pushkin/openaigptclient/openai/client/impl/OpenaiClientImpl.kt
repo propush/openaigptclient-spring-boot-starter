@@ -28,8 +28,6 @@ class OpenaiClientImpl(
         private const val DEFAULT_ROLE = "user"
         private const val BUFFER_SIZE = 1024
 
-        //        private const val DEFAULT_MODEL = "text-davinci-003"
-        private const val BASE_URL_V1 = "https://api.openai.com/v1"
         private const val COMPLETION_PATH = "/chat/completions"
 
         private val dataRegex = Regex(
@@ -50,11 +48,12 @@ class OpenaiClientImpl(
         do {
             try {
                 retryCount++
+                logger.debug { "Using base url ${openaiClientProperties.baseUrl}" }
                 logger.info { "Fetching completion for prompt, try $retryCount of ${openaiClientProperties.retryCount}: $prompt" }
                 val responseExtractor: (response: ClientHttpResponse) -> Unit =
                     { response -> processResponseBody(response, rs, chunkCallback) }
                 restTemplate.execute(
-                    "$BASE_URL_V1$COMPLETION_PATH",
+                    "${openaiClientProperties.baseUrl}$COMPLETION_PATH",
                     HttpMethod.POST,
                     rq,
                     responseExtractor,

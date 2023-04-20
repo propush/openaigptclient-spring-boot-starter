@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.github.propush"
-version = "1.0.18"
+version = "1.1.0"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {

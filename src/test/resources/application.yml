@@ -1,4 +1,5 @@
 openai:
+  base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
   api-key: ${OPENAI_API_KEY}
   organization: ${OPENAI_ORGANIZATION??:}
   retry-count: 3
